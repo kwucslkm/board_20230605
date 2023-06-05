@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="component/config :: config"></th:block>
+</head>
+<body>
+<div th:replace="component/header :: header"></div>
+<div th:replace="component/nav :: nav"></div>
+<div id="section">
+<table>
+    <tr>
+        <th>글번호</th>
+        <th>글제목</th>
+        <th>글비번</th>
+        <th>작성자</th>
+        <th>글내용</th>
+        <th>조회수</th>
+    </tr>
+    <tr th:each="board:${list}">
+        <td th:text="${board.id}"></td>
+        <td><a th:href="@{|/board/${board.id}|}" th:text="${board.boardTitle}"></a></td>
+        <td th:text="${board.boardPass}"></td>
+        <td th:text="${board.boardWriter}"></td>
+        <td th:text="${board.boardContents}"></td>
+        <td th:text="${board.boardHits}"></td>
+        <td th:text="${board.createdAt}"></td>
+
+    </tr>
+</table>
+
+</div>
+<div id="boardDetail-Area">
+
+</div>
+<div th:replace="component/footer :: footer"></div>
+
+</body>
+<script>
+    // const member_detail = (id) => {
+    //   axios({
+    //       method:"post",
+    //       url:"/board"+id
+    //   }).then(res=> {
+    //       console.log("res",res);
+    //   }).catch(err=>{
+    //       console.log("err",err);
+    //   })
+    // }
+
+</script>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="component/config :: config"></th:block>
+</head>
+<body>
+<div th:replace="component/header :: header"></div>
+<div th:replace="component/nav :: nav"></div>
+<div id="section">
+    <div id="boardUpdateForm">
+        <form th:action="@{/board/update/{id}(id=${board.id})}" method="post">
+           작성자:<input type="text" name="boardWriter" readonly th:value="${board.boardWriter}"><br>
+          제목:<input type="text" name="boardTitle" readonly th:value="${board.boardTitle}"><br>
+            비밀번호:<input type="text" name="boardPass" th:value="${board.boardPass}"><br>
+          내용:<textarea name="boardContents" cols="30" rows="10" th:text="${board.boardContents}"></textarea><br>
+        조회수:<input type="text" name="boardHits" readonly th:value="${board.boardHits}"><br>
+            <input type="submit" value="글저장">
+        </form>
+    </div>
+
+</div>
+
+<div th:replace="component/footer :: footer"></div>
+</body>
+<!--<script>-->
+<!--    const board_Save = () => {-->
+<!--        const boardWriter = document.querySelector('input[name="boardWriter"]').value;-->
+<!--        const boardTitle = document.querySelector('input[name="boardTitle"]').value;-->
+<!--        const boardPass = document.querySelector('input[name="boardPass"]').value;-->
+<!--        const boardContents = document.querySelector('textarea[name="boardContents"]').value;-->
+<!--        axios({-->
+<!--            method:"post",-->
+<!--            url:"/board/save",-->
+<!--            data:{-->
+<!--                boardWriter : boardWriter,-->
+<!--                boardTitle : boardTitle,-->
+<!--                boardPass : boardPass,-->
+<!--                boardContents : boardContents-->
+<!--            }-->
+<!--        }).then(res => {-->
+<!--            cosole.log("res",res);-->
+<!--            alert("글 저장 성공");-->
+<!--            location.href="boardPages/boardList";-->
+<!--        }).catch(err =>{-->
+<!--            console.log("err",err);-->
+<!--            alert("글 저장 실패");-->
+<!--        })-->
+
+
+<!--    }-->
+<!--</script>-->
+</html>

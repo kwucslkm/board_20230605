@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="component/config :: config"></th:block>
+</head>
+<body>
+<div th:replace="component/header :: header"></div>
+<div th:replace="component/nav :: nav"></div>
+<div id="section">
+    <table>
+        <tr>
+            <th>글번호</th>
+            <td th:text="${board.id}"></td>
+        </tr>
+        <tr>
+            <th>글작성자</th>
+            <td th:text="${board.boardTitle}"></td>
+        </tr>
+        <tr>
+            <th>비밀번호</th>
+
+            <td th:text="${board.boardPass}"></td>
+        </tr>
+        <tr>
+            <th>제목</th>
+            <td th:text="${board.boardTitle}"></td>
+        </tr>
+        <tr>
+            <th>내용</th>
+            <td th:text="${board.boardContents}"></td>
+        </tr>
+        <tr>
+            <th>작성날짜</th>
+            <td th:text="${board.createdAt}"></td>
+        </tr>
+        <tr>
+            <th>조회수</th>
+            <td th:text="${board.boardHits}"></td>
+        </tr>
+    </table>
+    <br>
+    <button id="boardListBtn" th:onclick="board_List()">목록</button>
+    <button id="boardUpdateBtn" th:onclick="board_Update()">수정</button>
+    <button id="boardDeleteBtn" th:onclick="board_Delete()">삭제</button>
+    <br>
+    <div id="boardDetail-Area">
+        <input type="text" id="boardPassInput" placeholder="비밀번호입력">
+        <input type="button" id="boardPassBtn" value="확인" th:onclick="del_chk([[${board.id}]])">
+    </div>
+</div>
+<div th:replace="component/footer :: footer"></div>
+
+</body>
+<script th:inline="javascript">
+    let delCheckNum = 0;
+    const board_List = () => {
+        location.href = "/board/";
+    }
+    const board_Delete = () => {
+        const boardPassInputbox = document.getElementById("boardPassInput");
+        delCheckNum = 2;
+        boardPassInputbox.focus();
+    }
+    const board_Update = () => {
+        const boardPassInputbox = document.getElementById("boardPassInput");
+        delCheckNum = 1;
+        boardPassInputbox.focus();
+    }
+    const del_chk = (id) => {
+        const passDB = [[${board.boardPass}]];
+        const boardPassInputbox = document.getElementById("boardPassInput");
+        console.log(passDB);
+        console.log(boardPassInputbox.value);
+        if (boardPassInputbox.value == passDB) {
+            if (delCheckNum == 1) {
+                location.href = "/board/update/" + id;
+            } else if (delCheckNum == 2) {
+                location.href = "/board/delete/" + id;
+            }
+
+        } else {
+            alert("비밀번호가 틀렸습니다.")
+            boardPassInputbox.focus();
+        }
+    }
+
+</script>
+</html>
