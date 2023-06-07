@@ -7,6 +7,8 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,17 +31,25 @@ public class BoardEntity {
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
+    @Column
+    private int fileAttached;
+
+    @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<BoardFileEntity> boardFileEntityList = new ArrayList<>();
+
     public static BoardEntity saveToBoardEntity(BoardDTO boardDTO) {
         BoardEntity boardEntity = setBoardEntityNoId(boardDTO);
         boardEntity.setBoardHits(0);
 
         return boardEntity;
     }
+
     public static BoardEntity saveToBoardEntityInId(BoardDTO boardDTO) {
         BoardEntity boardEntity = setBoardEntityNoId(boardDTO);
         boardEntity.setId(boardDTO.getId());
         return boardEntity;
     }
+
     private static BoardEntity setBoardEntityNoId(BoardDTO boardDTO) {
         BoardEntity boardEntity = new BoardEntity();
         boardEntity.setBoardWriter(boardDTO.getBoardWriter());
@@ -47,7 +57,14 @@ public class BoardEntity {
         boardEntity.setBoardPass(boardDTO.getBoardPass());
         boardEntity.setBoardContents(boardDTO.getBoardContents());
         boardEntity.setBoardHits(boardDTO.getBoardHits());
+        boardEntity.setFileAttached(0);
         return boardEntity;
     }
 
+    public static BoardEntity SaveToEntityWithFile(BoardDTO boardDTO) {
+        BoardEntity boardEntity = setBoardEntityNoId(boardDTO);
+        boardEntity.setFileAttached(1);
+        return boardEntity;
+
+    }
 }

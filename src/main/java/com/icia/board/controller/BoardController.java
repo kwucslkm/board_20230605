@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -23,9 +24,9 @@ public class BoardController {
         return "boardPages/boardSave";
     }
     @PostMapping("/save")
-    public ResponseEntity save(@RequestBody BoardDTO boardDTO){
+    public String save(@ModelAttribute BoardDTO boardDTO) throws IOException {
         boardService.save(boardDTO);
-        return new ResponseEntity(boardDTO,HttpStatus.OK);
+        return "redirect:/board/";
     }
     @GetMapping("/")
     public String findAll(Model model){
@@ -55,14 +56,16 @@ public class BoardController {
     }
     @PostMapping("/update/{id}")
     public String update(@ModelAttribute BoardDTO boardDTO){
-        System.out.println("수정에서boardDTO = " + boardDTO);
+        System.out.println("수정할getId() = " + boardDTO.getId());
+        System.out.println("수정할boardDTO = " + boardDTO);
         boardService.update(boardDTO);
-        return "redirect:/";
+        return "redirect:/board/";
     }
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id){
          boardService.delete(id);
-        return "redirect:/";
+        return "redirect:/board/";
+
     }
 
 

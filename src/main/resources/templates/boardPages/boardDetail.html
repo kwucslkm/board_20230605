@@ -31,21 +31,26 @@
         </tr>
         <tr>
             <th>작성날짜</th>
-            <td th:text="${board.createdAt}"></td>
+            <td th:text="*{#temporals.format(board.createdAt,'yyyy-MM-dd HH:mm:ss')}"></td>
         </tr>
         <tr>
             <th>조회수</th>
             <td th:text="${board.boardHits}"></td>
         </tr>
+        <tr th:if="${board.fileAttached==1}">
+            <th>image</th>
+            <td th:each="fileName: ${board.storedFileName}">
+                <img th:src="@{|/upload/${fileName}}" width="200" height="200" alt="">
+            </td>
+        </tr>
     </table>
     <br>
     <button id="boardListBtn" th:onclick="board_List()">목록</button>
-    <button id="boardUpdateBtn" th:onclick="board_Update()">수정</button>
-    <button id="boardDeleteBtn" th:onclick="board_Delete()">삭제</button>
+    <button id="boardUpdateBtn" th:onclick="board_sep(1)">수정</button>
+    <button id="boardDeleteBtn" th:onclick="board_sep(2)">삭제</button>
     <br>
     <div id="boardDetail-Area">
-        <input type="text" id="boardPassInput" placeholder="비밀번호입력">
-        <input type="button" id="boardPassBtn" value="확인" th:onclick="del_chk([[${board.id}]])">
+
     </div>
 </div>
 <div th:replace="component/footer :: footer"></div>
@@ -56,22 +61,32 @@
     const board_List = () => {
         location.href = "/board/";
     }
-    const board_Delete = () => {
+    const board_sep = (type) => {
+        boardDetailArea = document.getElementById("boardDetail-Area");
+        boardDetailArea.innerHTML = `
+            <input type="text" id="boardPassInput" placeholder="비밀번호 입력">
+            <input type="button" id="boardPassBtn" value="확인" onclick="del_chk([[${board.id}]])">`;
         const boardPassInputbox = document.getElementById("boardPassInput");
-        delCheckNum = 2;
+        console.log("type",type);
+        delCheckNum = type;
+        console.log(delCheckNum);
         boardPassInputbox.focus();
     }
-    const board_Update = () => {
-        const boardPassInputbox = document.getElementById("boardPassInput");
-        delCheckNum = 1;
-        boardPassInputbox.focus();
-    }
+    // const board_Update = () => {
+    //     boardDetailArea = document.getElementById("boardDetail-Area");
+    //     boardDetailArea.innerHTML = `
+    //         <input type="text" id="boardPassInput" placeholder="비밀번호 입력">
+    //         <input type="button" id="boardPassBtn" value="확인" th:onclick="'del_chk(' + ${board.id} + ')'" />`;
+    //     const boardPassInputbox = document.getElementById("boardPassInput");
+    //     delCheckNum = type;
+    //     boardPassInputbox.focus();
+    // }
     const del_chk = (id) => {
         const passDB = [[${board.boardPass}]];
-        const boardPassInputbox = document.getElementById("boardPassInput");
+        const boardPassInputBox = document.getElementById("boardPassInput");
         console.log(passDB);
-        console.log(boardPassInputbox.value);
-        if (boardPassInputbox.value == passDB) {
+        console.log(boardPassInputBox.value);
+        if (boardPassInputBox.value == passDB) {
             if (delCheckNum == 1) {
                 location.href = "/board/update/" + id;
             } else if (delCheckNum == 2) {

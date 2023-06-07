@@ -7,12 +7,14 @@
     <div th:replace="component/header :: header"></div>
     <div th:replace="component/nav :: nav"></div>
     <div id="section">
-        <form action="/board/save" method="post">
+        <form action="/board/save" method="post" enctype="multipart/form-data">
             <input type="text" name="boardWriter" placeholder="작성자">
             <input type="text" name="boardTitle" placeholder="제목">
             <input type="text" name="boardPass" placeholder="비밀번호">
             <textarea type="text" name="boardContents">내용작성</textarea>
-            <input type="button" value="글저장" onclick="board_Save()">
+            <input type="file" name="boardFile" class="form-control" multiple>
+            <input type="submit" value="글저장">
+<!--            <input type="submit" value="글저장" onclick="board_Save()">-->
         </form>
 
     </div>
@@ -20,30 +22,30 @@
     <div th:replace="component/footer :: footer"></div>
 </body>
 <script>
-    const board_Save = () => {
-        const boardWriter = document.querySelector('input[name="boardWriter"]').value;
-        const boardTitle = document.querySelector('input[name="boardTitle"]').value;
-        const boardPass = document.querySelector('input[name="boardPass"]').value;
-        const boardContents = document.querySelector('textarea[name="boardContents"]').value;
-        axios({
-            method:"post",
-            url:"/board/save",
-            data:{
-                boardWriter : boardWriter,
-                boardTitle : boardTitle,
-                boardPass : boardPass,
-                boardContents : boardContents
-            }
-        }).then(res => {
-            cosole.log("res",res);
-            alert("글 저장 성공");
-            location.href="boardPages/boardList";
-        }).catch(err =>{
-            console.log("err",err);
-            alert("글 저장 실패");
-        })
-
-
-    }
+    // const board_Save = () => {
+    //     const boardWriter = document.querySelector('input[name="boardWriter"]').value;
+    //     const boardTitle = document.querySelector('input[name="boardTitle"]').value;
+    //     const boardPass = document.querySelector('input[name="boardPass"]').value;
+    //     const boardContents = document.querySelector('textarea[name="boardContents"]').value;
+    //     axios({
+    //         method:"post",
+    //         url:"/board/save",
+    //         data:{
+    //             boardWriter : boardWriter,
+    //             boardTitle : boardTitle,
+    //             boardPass : boardPass,
+    //             boardContents : boardContents
+    //         }
+    //     }).then(res => {
+    //         cosole.log("res",res);
+    //         alert("글 저장 성공");
+    //         location.href="boardPages/boardList";
+    //     }).catch(err =>{
+    //         console.log("err",err);
+    //         alert("글 저장 실패");
+    //     })
+    //
+    //
+    // }
 </script>
 </html>
