@@ -31,7 +31,8 @@
         </tr>
         <tr>
             <th>작성날짜</th>
-            <td th:text="*{#temporals.format(board.createdAt,'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td th:text="${board.createdAt}"></td>
+            <!--            <td th:text="*{#temporals.format(board.createdAt,'yyyy-MM-dd HH:mm:ss')}"></td>-->
         </tr>
         <tr>
             <th>조회수</th>
@@ -52,47 +53,122 @@
     <div id="boardDetail-Area">
 
     </div>
+    <div id="commentBtn">
+        <button id="commentWriteBtn" th:onclick="comment_write()">댓글쓰기</button>
+    </div>
+    <div id="comment-Area">
+        <div th:if="${commentList==null}">
+            <p>작성된 댓글이 없습니다.</p>
+        </div>
+        <div th:unless="${commentList==null}">
+            <table class="table">
+                <tr>
+                    <th>id</th>
+                    <th>writer</th>
+                    <th>contents</th>
+                    <th>date</th>
+                </tr>
+                <tr th:each="comment: ${commentList}">
+                    <td th:text="${comment.id}"></td>
+                    <td th:text="${comment.commentWriter}"></td>
+                    <td th:text="${comment.commentContents}"></td>
+                    <td th:text="${comment.createdAt}"></td>
+                </tr>
+
+            </table>
+
+        </div>
+    </div>
 </div>
 <div th:replace="component/footer :: footer"></div>
 
 </body>
 <script th:inline="javascript">
-    let delCheckNum = 0;
+    const comment_list = (commentList) => {
+        const commentArea = document.querySelector("#comment-Area");
+        let outPut = "<table class=\"table\">\n" +
+            "                <tr>\n" +
+            "                    <th>id</th>\n" +
+            "                    <th>writer</th>\n" +
+            "                    <th>contents</th>\n" +
+            "                    <th>date</th>\n" +
+            "                </tr>";
+        for(let i in commentList){
+            outPut += "<tr>\n" +
+                "                    <td>"+commentList[i].id + "</td>\n" +
+                "                    <td>"+commentList[i].commentWriter + "</td>\n" +
+                "                    <td>"+commentList[i].commentContents + "</td>\n" +
+                "                    <td>"+commentList[i].createdAt + "</td>\n" +
+                "                </tr>";
+        }
+        outPut += "</table>";
+        commentArea.innerHTML=outPut;
+
+    }
     const board_List = () => {
         location.href = "/board/";
+    }
+    const comment_write = () => {
+        const commentArea = document.getElementById("comment-Area");
+        const bId = [[${board.id}]];
+
+        console.log(bId);
+        commentArea.innerHTML = `<form action="/comment/save/">
+            <input type="text" name="commentWriter" id="commentWriter" placeholder="작성자입력">
+            <input type="text" name="commentContents" id="commentContents" placeholder="내용입력">
+            <input type="button" id="boardPassBtn" value="확인" onclick="comment_submit()">
+            </form>`;
+
+    }
+    const comment_submit = () => {
+        const cWriter = document.getElementById("commentWriter").value;
+        const cContents = document.getElementById("commentContents").value;
+        const bId = [[${board.id}]];
+
+        console.log(bId);
+        console.log(cWriter);
+        console.log(cContents);
+
+        axios({
+            method: "post",
+            url: "/comment/save",
+            data: {
+                boardId: bId,
+                commentWriter: cWriter,
+                commentContents: cContents
+            }
+        }).then(res => {
+            const commentArea = document.querySelector("#comment-Area");
+            console.log("res", res);
+            comment_list(res.data);
+
+        }).catch(err => {
+            console.log("err", err);
+        })
+
+
     }
     const board_sep = (type) => {
         boardDetailArea = document.getElementById("boardDetail-Area");
         boardDetailArea.innerHTML = `
             <input type="text" id="boardPassInput" placeholder="비밀번호 입력">
-            <input type="button" id="boardPassBtn" value="확인" onclick="del_chk([[${board.id}]])">`;
+            <input type="button" id="boardPassBtn" value="확인" onclick="de_chk(${type})">`;
         const boardPassInputbox = document.getElementById("boardPassInput");
-        console.log("type",type);
-        delCheckNum = type;
-        console.log(delCheckNum);
+        // console.log(delCheckNum);
         boardPassInputbox.focus();
     }
-    // const board_Update = () => {
-    //     boardDetailArea = document.getElementById("boardDetail-Area");
-    //     boardDetailArea.innerHTML = `
-    //         <input type="text" id="boardPassInput" placeholder="비밀번호 입력">
-    //         <input type="button" id="boardPassBtn" value="확인" th:onclick="'del_chk(' + ${board.id} + ')'" />`;
-    //     const boardPassInputbox = document.getElementById("boardPassInput");
-    //     delCheckNum = type;
-    //     boardPassInputbox.focus();
-    // }
-    const del_chk = (id) => {
+    const de_chk = (type) => {
         const passDB = [[${board.boardPass}]];
+        const boardId = [[${board.id}]]
         const boardPassInputBox = document.getElementById("boardPassInput");
         console.log(passDB);
         console.log(boardPassInputBox.value);
         if (boardPassInputBox.value == passDB) {
-            if (delCheckNum == 1) {
-                location.href = "/board/update/" + id;
-            } else if (delCheckNum == 2) {
-                location.href = "/board/delete/" + id;
+            if (type == 1) {
+                location.href = "/board/update/" + boardId;
+            } else if (type == 2) {
+                location.href = "/board/delete/" + boardId;
             }
-
         } else {
             alert("비밀번호가 틀렸습니다.")
             boardPassInputbox.focus();

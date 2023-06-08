@@ -1,10 +1,10 @@
 package com.icia.board.controller;
 
 import com.icia.board.dto.BoardDTO;
+import com.icia.board.dto.CommentDTO;
 import com.icia.board.service.BoardService;
+import com.icia.board.service.CommentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +18,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
+    private final CommentService commentService;
 
     @GetMapping("/save")
     public String saveForm(){
@@ -40,6 +41,12 @@ public class BoardController {
         BoardDTO boardDTO = null;
         try {
             boardDTO = boardService.findById(id);
+            List<CommentDTO> commenttDTOList = commentService.findAll(id);
+            if (commenttDTOList.size()>0){
+            model.addAttribute("commentList",commenttDTOList);
+                }else{
+                model.addAttribute("commentList",null);
+            }
 
         }catch (NoSuchElementException e){
             return "boardPages/boardNotFound";

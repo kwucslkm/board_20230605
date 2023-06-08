@@ -2,6 +2,7 @@ package com.icia.board.dto;
 
 import com.icia.board.entity.BoardEntity;
 import com.icia.board.entity.BoardFileEntity;
+import com.icia.board.util.UtilClass;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +25,7 @@ public class BoardDTO {
     private String boardPass;
     private String boardContents;
     private int boardHits;
-    private LocalDateTime createdAt;
+    private String  createdAt;
     private List<MultipartFile> boardFile;
     private int fileAttached;
     private List<String> storedFileName;
@@ -39,7 +40,7 @@ public class BoardDTO {
         boardDTO.setBoardTitle(b.getBoardTitle());
         boardDTO.setBoardContents(b.getBoardContents());
         boardDTO.setBoardHits(b.getBoardHits());
-        boardDTO.setCreatedAt(b.getCreatedAt());
+        boardDTO.setCreatedAt(UtilClass.dateFormat(b.getCreatedAt()));
 
         // 파일 여부에 따른 코드 추가
         if (b.getFileAttached()==1){
