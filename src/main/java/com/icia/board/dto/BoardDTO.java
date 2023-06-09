@@ -43,7 +43,7 @@ public class BoardDTO {
         boardDTO.setCreatedAt(UtilClass.dateFormat(b.getCreatedAt()));
 
         // 파일 여부에 따른 코드 추가
-        if (b.getFileAttached()==1){
+        if (b.getFileAttached()==1){ // 넘어온 entity에 파일이 있으면
             boardDTO.setFileAttached(1);
             //파일 이름을 담을 리스트 객체 선언
             List<String> originalFileNameList = new ArrayList<>();

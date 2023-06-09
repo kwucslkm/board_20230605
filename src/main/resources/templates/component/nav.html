@@ -6,25 +6,42 @@
 </head>
 <body>
 <div th:fragment="nav" id="nav">
-    <ul>
-        <li>
-            <a href="/">
-                <i class="bi bi-house"></i>
-            </a>
-        </li>
-        <li id="navMemberRegBtn">
-            <a href="/board/save">글작성하기</a>
-        </li>
-        <li>
-            <a href="/board/">글목록</a>
-        </li>
-        <li class="login-name" id="login-area">
-
-        </li>
-    </ul>
-    <script th:inline="javascript">
-
+    <div class="menu">
+        <a href="/">
+            <i class="bi bi-house"></i>
+        </a>
+    </div>
+    <div class="menu">
+        <a href="/board/save">글작성</a>
+    </div>
+    <div class="menu">
+        <a href="/board/">글목록</a>
+    </div>
+    <div class="menu">
+        <!-- /board?page=1
+            7페이지에 있는 33번글 조회
+            rest api => /board/7/33
+            /board/33 => 33번글 /board/33?page=7
+        -->
+        <a th:href="@{/board(page=1)}">페이징목록</a>
+    </div>
+    <div class="menu search">
+        <select name="type" id="type">
+            <option value="writer">작성자</option>
+            <option value="title">제목</option>
+        </select>
+        <input type="text" placeholder="검색어를 입력하세요" id="q" style="display: inline-block;">
+        <i class="bi bi-search" onclick="search_func()"></i>
+    </div>
+    <script>
+        const search_func = () => {
+            const type = document.querySelector("#type").value;
+            const q = document.querySelector("#q").value;
+            location.href = "/board?type=" + type + "&q=" + q;
+        }
     </script>
 </div>
+
 </body>
+
 </html>

@@ -5,7 +5,12 @@ import com.icia.board.entity.BoardEntity;
 import com.icia.board.entity.BoardFileEntity;
 import com.icia.board.repository.BoardFileReposity;
 import com.icia.board.repository.BoardRepository;
+import com.icia.board.util.UtilClass;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -83,7 +88,31 @@ public class BoardService {
     public void update(BoardDTO boardDTO) {
         BoardEntity boardEntity = BoardEntity.saveToBoardEntityInId(boardDTO);
         boardRepository.save(boardEntity);
+    }
+
+    public Page<BoardDTO> paging(Pageable pageable, String type, String q) {
+        int page = pageable.getPageNumber() - 1; // 시작페이지
+        int pageLimit = 5; // 한 화면에 5글씩 보겠다.
+        Page<BoardEntity> boardEntities = null;
+        if(type.equals("title")){
+            boardEntities = boardRepository.findByBoardTitleContaining(q, PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
 
 
+        }else if(type.equals("writer")){
+            boardEntities = boardRepository.findByBoardWriterContaining(q, PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
+
+        }else {
+            boardEntities = boardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
+
+        }
+
+        Page<BoardDTO> boardDTOS = boardEntities.map(boardEntity -> BoardDTO.builder()
+                .id(boardEntity.getId())
+                .boardTitle(boardEntity.getBoardTitle())
+                .boardWriter(boardEntity.getBoardWriter())
+                .createdAt(UtilClass.dateFormat(boardEntity.getCreatedAt()))
+                .boardHits(boardEntity.getBoardHits())
+                .build());
+        return boardDTOS;
     }
 }

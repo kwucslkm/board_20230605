@@ -85,6 +85,7 @@
 </body>
 <script th:inline="javascript">
     const comment_list = (commentList) => {
+
         const commentArea = document.querySelector("#comment-Area");
         let outPut = "<table class=\"table\">\n" +
             "                <tr>\n" +
@@ -93,20 +94,23 @@
             "                    <th>contents</th>\n" +
             "                    <th>date</th>\n" +
             "                </tr>";
-        for(let i in commentList){
+        for (let i in commentList) {
             outPut += "<tr>\n" +
-                "                    <td>"+commentList[i].id + "</td>\n" +
-                "                    <td>"+commentList[i].commentWriter + "</td>\n" +
-                "                    <td>"+commentList[i].commentContents + "</td>\n" +
-                "                    <td>"+commentList[i].createdAt + "</td>\n" +
+                "                    <td>" + commentList[i].id + "</td>\n" +
+                "                    <td>" + commentList[i].commentWriter + "</td>\n" +
+                "                    <td>" + commentList[i].commentContents + "</td>\n" +
+                "                    <td>" + commentList[i].createdAt + "</td>\n" +
                 "                </tr>";
         }
         outPut += "</table>";
-        commentArea.innerHTML=outPut;
+        commentArea.innerHTML = outPut;
 
     }
     const board_List = () => {
-        location.href = "/board/";
+        const page = [[${page}]];
+        const type = [[${type}]];
+        const q = [[${q}]];
+        location.href = "/board?page=" + page + "&type=" + type + "&q=" + q;
     }
     const comment_write = () => {
         const commentArea = document.getElementById("comment-Area");
@@ -161,11 +165,15 @@
         const passDB = [[${board.boardPass}]];
         const boardId = [[${board.id}]]
         const boardPassInputBox = document.getElementById("boardPassInput");
+        const page = [[${page}]];
+        const searchType = [[${type}]];
+        const q = [[${q}]];
         console.log(passDB);
         console.log(boardPassInputBox.value);
         if (boardPassInputBox.value == passDB) {
             if (type == 1) {
-                location.href = "/board/update/" + boardId;
+                // location.href = "/board/update/" + boardId;
+                location.href="/board/update?id="+ boardId + "&page=" + page + "&type=" + searchType + "&q="+q;
             } else if (type == 2) {
                 location.href = "/board/delete/" + boardId;
             }

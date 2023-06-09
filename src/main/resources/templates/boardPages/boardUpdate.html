@@ -15,7 +15,8 @@
             내용:<textarea name="boardContents" cols="30" rows="10" th:text="${board.boardContents}"></textarea><br>
             조회수:<input type="text" name="boardHits" readonly th:value="${board.boardHits}"><br>
             <input type="hidden" name="id" readonly th:value="${board.id}"><br>
-            <input type="submit" value="글저장">
+            <input type="button" value="글저장" th:onclick="update_save()">
+<!--            <input type="submit" value="글저장">-->
         </form>
     </div>
 
@@ -23,31 +24,42 @@
 
 <div th:replace="component/footer :: footer"></div>
 </body>
-<!--<script>-->
-<!--    const board_Save = () => {-->
-<!--        const boardWriter = document.querySelector('input[name="boardWriter"]').value;-->
-<!--        const boardTitle = document.querySelector('input[name="boardTitle"]').value;-->
-<!--        const boardPass = document.querySelector('input[name="boardPass"]').value;-->
-<!--        const boardContents = document.querySelector('textarea[name="boardContents"]').value;-->
-<!--        axios({-->
-<!--            method:"post",-->
-<!--            url:"/board/save",-->
-<!--            data:{-->
-<!--                boardWriter : boardWriter,-->
-<!--                boardTitle : boardTitle,-->
-<!--                boardPass : boardPass,-->
-<!--                boardContents : boardContents-->
-<!--            }-->
-<!--        }).then(res => {-->
-<!--            cosole.log("res",res);-->
-<!--            alert("글 저장 성공");-->
-<!--            location.href="boardPages/boardList";-->
-<!--        }).catch(err =>{-->
-<!--            console.log("err",err);-->
-<!--            alert("글 저장 실패");-->
-<!--        })-->
+<script th:inline="javascript">
+
+    const update_save = () => {
+        const boardWriter = document.querySelector('input[name="boardWriter"]').value;
+        const boardTitle = document.querySelector('input[name="boardTitle"]').value;
+        const boardPass = document.querySelector('input[name="boardPass"]').value;
+        const boardContents = document.querySelector('textarea[name="boardContents"]').value;
+        const boardHits = document.querySelector('input[name="boardHits"]').value;
+        const boardId =[[${board.id}]];
+        const page = [[${page}]];
+        const searchType = [[${type}]];
+        const q = [[${q}]];
+        console.log("page", page);
+        console.log("type", searchType);
+        console.log("q", q);
+        axios({
+            method:"post",
+            url:"/board/update?page="+page+"&q="+q+"&type"+searchType,
+            data:{
+                boardId : boardId,
+                boardWriter : boardWriter,
+                boardTitle : boardTitle,
+                boardPass : boardPass,
+                boardContents : boardContents,
+                boardHits : boardHits
+            }
+        }).then(res => {
+            cosole.log("res",res);
+            alert("글 저장 성공");
+            location.href="boardPages/boardList";
+        }).catch(err =>{
+            console.log("err",err);
+            alert("글 저장 실패");
+        })
 
 
-<!--    }-->
-<!--</script>-->
+    }
+</script>
 </html>

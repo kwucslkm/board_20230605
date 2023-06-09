@@ -1,44 +1,77 @@
-#header{
-    background-color: darkslategrey;
-    color: white;
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+#header {
+    background-color: #00A170;
     text-align: center;
+    color: white;
     padding: 20px;
+    font-weight: bold;
+    font-family: 'Prompt', sans-serif;
 }
+
 #nav {
-    background-color: dimgray;
+    display: flex;
+    padding: 10px 100px;
+    background-color: #363945;
+    font-weight: bold;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+#nav .menu {
+    padding: 10px;
     color: white;
 }
-#nav ul {
-    list-style-type: none;
-    overflow: hidden;
-}
-#nav ul li {
-    float: left;
-}
-#nav ul li a {
-    display: inline-block;
-    padding: 15px;
+
+#nav .menu a {
     text-decoration: none;
     color: white;
 }
+
+#nav .search {
+    margin-left: auto;
+}
+
 #section {
-    margin: auto 0;
+    background-color: white;
+    padding: 20px;
+    /*height: 300px;*/
+}
+
+#section h2 {
+    text-align: center;
+}
+
+#section pre {
+    text-align: left;
+}
+
+#footer {
+    background-color: #9F9C99;
     display: flex;
     justify-content: center;
     align-items: center;
+    /*height: 50px;*/
+    font-family: 'Prompt', sans-serif;
 }
 
-#section #memberDetailPage, #memberDetailPage th, #memberDetailPage td{
-    border: solid black 1px;
+#footer h6 {
+    margin: 0;
 }
-/*#section a, #section h2{*/
-/*    margin: auto 0;*/
-/*    display: block;*/
-/*}*/
 
-#footer {
-    background-color: black;
-    text-align: center;
-    color: yellow;
-    padding: 20px;
-}
+
+
+
+
+
+
+
+
+
+
+
+
