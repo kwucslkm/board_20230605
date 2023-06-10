@@ -32,7 +32,9 @@ public class BoardController {
     @PostMapping("/save")
     public String save(@ModelAttribute BoardDTO boardDTO) throws IOException {
         boardService.save(boardDTO);
-        return "redirect:/board/";
+        System.out.println("저장한 다음에 어디로 갈까?");
+
+        return "redirect:";
     }
     @GetMapping("/")
     public String findAll(Model model){
